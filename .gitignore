@@ -28,6 +28,7 @@ app.db
 .python-version
 .tox
 dump.rdb
+.ropeproject/
 
 # Node.js, webpack artifacts
 *.entry.js
