@@ -444,8 +444,9 @@ export const controls = {
   select_country: {
     type: 'SelectControl',
     label: t('Country Name'),
-    default: 'France',
+    default: 'Uk',
     choices: [
+      'London',
       'Belgium',
       'Brazil',
       'China',
