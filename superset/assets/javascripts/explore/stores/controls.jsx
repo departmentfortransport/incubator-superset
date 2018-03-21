@@ -444,8 +444,10 @@ export const controls = {
   select_country: {
     type: 'SelectControl',
     label: t('Country Name'),
-    default: 'Uk',
+    default: 'seras_zones',
     choices: [
+      'seras_zones',
+      'london_seras',
       'London',
       'Belgium',
       'Brazil',

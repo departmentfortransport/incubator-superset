@@ -14,10 +14,15 @@ function countryMapChart(slice, payload) {
   const data = payload.data;
   const format = d3.format(fd.number_format);
 
-  const colorScaler = colorScalerFactory(fd.linear_color_scheme, data, v => v.metric);
+  const colorScalerNegative = colorScalerFactory('negative', data, v => v.metric);
+  const colorScalerPositive = colorScalerFactory('positive', data, v => v.metric);
   const colorMap = {};
   data.forEach((d) => {
-    colorMap[d.country_id] = colorScaler(d.metric);
+    if (d.metric < 0) {
+      colorMap[d.country_id] = colorScalerNegative(d.metric);
+    } else {
+      colorMap[d.country_id] = colorScalerPositive(d.metric);
+    }
   });
   const colorFn = d => colorMap[d.properties.ISO] || 'none';
 

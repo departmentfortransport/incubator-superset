@@ -76,6 +76,14 @@ export const ALL_COLOR_SCHEMES = {
 };
 
 export const spectrums = {
+  negative: [
+    'red',
+    'white'
+  ],
+  positive: [
+    'white',
+    'green'
+  ],
   blue_white_yellow: [
     '#00d1c1',
     'white',
