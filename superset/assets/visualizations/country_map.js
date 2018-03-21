@@ -23,6 +23,9 @@ function countryMapChart(slice, payload) {
     data.forEach((d) => {
       if (d.metric < 0) {
         colorMap[d.country_id] = colorScalerNegative(d.metric);
+        console.log(typeof colorMap[d.country_id])
+      } else if (d.metric == 0){
+        colorMap[d.country_id] = "#ffffff";
       } else {
         colorMap[d.country_id] = colorScalerPositive(d.metric);
       }
