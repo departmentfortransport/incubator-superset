@@ -14,16 +14,25 @@ function countryMapChart(slice, payload) {
   const data = payload.data;
   const format = d3.format(fd.number_format);
 
-  const colorScalerNegative = colorScalerFactory('negative', data, v => v.metric);
-  const colorScalerPositive = colorScalerFactory('positive', data, v => v.metric);
+  // checking whether need two different scalers or one is enough
+  const colorScaler = colorScalerFactory(fd.linear_color_scheme, data, v => v.metric);
   const colorMap = {};
-  data.forEach((d) => {
-    if (d.metric < 0) {
-      colorMap[d.country_id] = colorScalerNegative(d.metric);
-    } else {
-      colorMap[d.country_id] = colorScalerPositive(d.metric);
-    }
-  });
+  if (fd.linear_color_scheme == 'positive_negative') {
+    const colorScalerNegative = colorScalerFactory('negative', data, v => v.metric);
+    const colorScalerPositive = colorScalerFactory('positive', data, v => v.metric);
+    data.forEach((d) => {
+      if (d.metric < 0) {
+        colorMap[d.country_id] = colorScalerNegative(d.metric);
+      } else {
+        colorMap[d.country_id] = colorScalerPositive(d.metric);
+      }
+    })
+  } else {
+    const colorScaler = colorScalerFactory(fd.linear_color_scheme, data, v => v.metric);
+    data.forEach((d) => {
+      colorMap[d.country_id] = colorScaler(d.metric);
+    })
+  }
   const colorFn = d => colorMap[d.properties.ISO] || 'none';
 
   let centered;

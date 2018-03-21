@@ -259,6 +259,7 @@ export const controls = {
     type: 'ColorSchemeControl',
     label: t('Linear Color Scheme'),
     choices: [
+      ['positive_negative','positive/negative'],
       ['fire', 'fire'],
       ['blue_white_yellow', 'blue/white/yellow'],
       ['white_black', 'white/black'],

@@ -76,13 +76,19 @@ export const ALL_COLOR_SCHEMES = {
 };
 
 export const spectrums = {
-  negative: [
+  //first is just for the legend
+  positive_negative: [
     'red',
-    'white'
+    'white',
+    'green'
   ],
   positive: [
     'white',
     'green'
+  ],
+  negative: [
+    'red',
+    'white'
   ],
   blue_white_yellow: [
     '#00d1c1',

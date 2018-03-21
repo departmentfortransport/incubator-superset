@@ -177,6 +177,10 @@
       "label": "Linear Color Scheme",
       "choices": [
         [
+          "positive_negative",
+          "positive/negative"
+        ],
+        [
           "fire",
           "fire"
         ],
@@ -206,6 +210,14 @@
       "description": "",
       "renderTrigger": true,
       "schemes": {
+        "negative": [
+          "red",
+          "white"
+        ],
+        "positive": [
+          "white",
+          "green"
+        ],
         "blue_white_yellow": [
           "#00d1c1",
           "white",
