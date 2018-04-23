@@ -14,18 +14,28 @@ function countryMapChart(slice, payload) {
   const data = payload.data;
   const format = d3.format(fd.number_format);
 
-  // checking whether need two different scalers or one is enough
-  const colorScaler = colorScalerFactory(fd.linear_color_scheme, data, v => v.metric);
+  // creating two different sets of data (positive and negative) needed for
+  // creating colour scales
+  var data_n = [];
+  var data_p = [];
+  data.forEach((d) => {
+    if (d.metric <= -0.5) {
+      data_n.push(d)
+    } else if (d.metric>=0.5) {
+      data_p.push(d)
+    }
+  })
+
+  // creating the color maps
   const colorMap = {};
   if (fd.linear_color_scheme == 'positive_negative') {
-    const colorScalerNegative = colorScalerFactory('negative', data, v => v.metric);
-    const colorScalerPositive = colorScalerFactory('positive', data, v => v.metric);
+    const colorScalerNegative = colorScalerFactory('negative', data_n, v => v.metric);
+    const colorScalerPositive = colorScalerFactory('positive', data_p, v => v.metric);
     data.forEach((d) => {
-      if (d.metric < 0) {
+      if (d.metric <= -0.5) {
         colorMap[d.country_id] = colorScalerNegative(d.metric);
-        console.log(typeof colorMap[d.country_id])
-      } else if (d.metric == 0){
-        colorMap[d.country_id] = "#ffffff";
+      } else if (d.metric >-0.5 & d.metric <0.5){
+        colorMap[d.country_id] = "#FBFBEF";
       } else {
         colorMap[d.country_id] = colorScalerPositive(d.metric);
       }

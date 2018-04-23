@@ -79,16 +79,16 @@ export const spectrums = {
   //first is just for the legend
   positive_negative: [
     'red',
-    'white',
+    '#FBFBEF',
     'green'
   ],
   positive: [
-    'white',
+    '#FBFBEF',
     'green'
   ],
   negative: [
     'red',
-    'white'
+    '#FBFBEF'
   ],
   blue_white_yellow: [
     '#00d1c1',
