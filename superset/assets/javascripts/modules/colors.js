@@ -74,21 +74,29 @@ export const ALL_COLOR_SCHEMES = {
   googleCategory10c,
   googleCategory20c,
 };
-
+const neutral = '#FBFBEF'
 export const spectrums = {
   //first is just for the legend
   positive_negative: [
     'red',
-    '#FBFBEF',
+    neutral,
     'green'
   ],
-  positive: [
-    '#FBFBEF',
+  neutral_green: [
+    neutral,
     'green'
   ],
-  negative: [
+  neutral_red: [
     'red',
-    '#FBFBEF'
+    neutral
+  ],
+  neutral_green_opp: [
+    'green',
+    neutral
+  ],
+  neutral_red_opp: [
+    neutral,
+    'red'
   ],
   blue_white_yellow: [
     '#00d1c1',
@@ -177,6 +185,7 @@ export const colorScalerFactory = function (colors, data, accessor, extents) {
   if (data) {
     ext = d3.extent(data, accessor);
   }
+  // console.log(ext)
   const chunkSize = (ext[1] - ext[0]) / (colors.length - 1);
   const points = colors.map((col, i) => ext[0] + (i * chunkSize));
   return d3.scale.linear().domain(points).range(colors).clamp(true);

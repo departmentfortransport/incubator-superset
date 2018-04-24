@@ -1,6 +1,7 @@
 import d3 from 'd3';
 import './country_map.css';
 import { colorScalerFactory } from '../javascripts/modules/colors';
+// import underscore
 
 
 function countryMapChart(slice, payload) {
@@ -14,32 +15,61 @@ function countryMapChart(slice, payload) {
   const data = payload.data;
   const format = d3.format(fd.number_format);
 
-  // creating two different sets of data (positive and negative) needed for
-  // creating colour scales
-  var data_n = [];
-  var data_p = [];
-  data.forEach((d) => {
-    if (d.metric <= -0.5) {
-      data_n.push(d)
-    } else if (d.metric>=0.5) {
-      data_p.push(d)
-    }
-  })
+  // function for checking filter values
+  function filterCheck(filter, value) {
+    let checkVals = false
+    fd.filters.forEach( (d) => {
+      if ((d['col']==filter) & (d['val'][0]==value) ) {
+        checkVals = true;
+      }
+    })
+    return checkVals
+  }
 
   // creating the color maps
   const colorMap = {};
   if (fd.linear_color_scheme == 'positive_negative') {
-    const colorScalerNegative = colorScalerFactory('negative', data_n, v => v.metric);
-    const colorScalerPositive = colorScalerFactory('positive', data_p, v => v.metric);
+    // note that the below order is important (not ideal)
+
+    // check values of filters
+    let journey = filterCheck('demand/journey time','journey time');
+    let pct_change = filterCheck('difference type','pct_change');
+
+    // define buffer
+    let buffer = 0.5
+    if (pct_change==true) {buffer = 0.005} // reduce buffer if for percentages
+
+    // creating two different sets of data (positive and negative) needed for
+    // creating color scales
+    let data_n = [];
+    let data_p = [];
     data.forEach((d) => {
-      if (d.metric <= -0.5) {
-        colorMap[d.country_id] = colorScalerNegative(d.metric);
-      } else if (d.metric >-0.5 & d.metric <0.5){
-        colorMap[d.country_id] = "#FBFBEF";
-      } else {
-        colorMap[d.country_id] = colorScalerPositive(d.metric);
+      if (d.metric <= -1*buffer) {
+        data_n.push(d)
+      } else if (d.metric >= buffer) {
+        data_p.push(d)
       }
     })
+    // create the color scales
+    let colorScalerRed= colorScalerFactory('neutral_red', data_n, v => v.metric);
+    let colorScalerGreen = colorScalerFactory('neutral_green', data_p, v => v.metric);
+
+    // swap the colours for journey times where decrease is good
+    if (journey==true) {
+      colorScalerRed = colorScalerFactory('neutral_green_opp', data_n, v => v.metric);
+      colorScalerGreen = colorScalerFactory('neutral_red_opp', data_p, v => v.metric);
+    }
+
+    data.forEach((d) => {
+      if (d.metric <= -1*buffer) {
+        colorMap[d.country_id] = colorScalerRed(d.metric);
+      } else if (d.metric >-1*buffer & d.metric <buffer){
+        colorMap[d.country_id] = "#FBFBEF";
+      } else {
+        colorMap[d.country_id] = colorScalerGreen(d.metric);
+      }
+    })
+
   } else {
     const colorScaler = colorScalerFactory(fd.linear_color_scheme, data, v => v.metric);
     data.forEach((d) => {
