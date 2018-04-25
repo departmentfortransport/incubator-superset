@@ -13,7 +13,7 @@ function countryMapChart(slice, payload) {
   let resultText;
   const container = slice.container;
   const data = payload.data;
-  const format = d3.format(fd.number_format);
+  let format = d3.format(fd.number_format)
 
   // function for checking filter values
   function filterCheck(filter, value) {
@@ -26,19 +26,24 @@ function countryMapChart(slice, payload) {
     return checkVals
   }
 
+  // check values of filters
+  let journey = filterCheck('comparison_metric','journey time');
+  let pct_change = filterCheck('difference type','pct_change');
+  let share = filterCheck('comparison_metric','share');
+
+
+  if (pct_change==true) {format = d3.format('.2%')}
+
   // creating the color maps
   const colorMap = {};
   if (fd.linear_color_scheme == 'positive_negative') {
     // note that the below order is important (not ideal)
 
-    // check values of filters
-    let journey = filterCheck('demand/journey time','journey time');
-    let pct_change = filterCheck('difference type','pct_change');
 
     // define buffer
     let buffer = 0.5
-    if (pct_change==true) {buffer = 0.005} // reduce buffer if for percentages
-
+    if (pct_change==true || share==true) {buffer = 0.005} // reduce buffer if for percentages
+    
     // creating two different sets of data (positive and negative) needed for
     // creating color scales
     let data_n = [];
