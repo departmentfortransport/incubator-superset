@@ -180,11 +180,24 @@ function sunburstVis(slice, payload) {
         .attr('y', yOffsets[offsetIndex++])
         .text(conditionalPercString + ' of parent');
     }
+    // quick capitalization function - needed below
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
-    gMiddleText.append('text')
-      .attr('class', 'path-metrics')
-      .attr('y', yOffsets[offsetIndex++])
-      .text('m1: ' + formatNum(d.m1) + (metricsMatch ? '' : ', m2: ' + formatNum(d.m2)));
+    try  {
+      gMiddleText.append('text')
+        .attr('class', 'path-metrics')
+        .attr('y', yOffsets[offsetIndex++])
+        .text(capitalizeFirstLetter(slice.formData.filters[0]['val'][0]) + ': ' + formatNum(d.m1) + (metricsMatch ? '' : ', m2: ' + formatNum(d.m2)));
+    } catch (e) {
+      gMiddleText.append('text')
+        .attr('class', 'path-metrics')
+        .attr('y', yOffsets[offsetIndex++])
+        .text('m1: ' + formatNum(d.m1) + (metricsMatch ? '' : ', m2: ' + formatNum(d.m2)));
+    }
+    // the above is not an elegant solution - too much repetition.
+    // Not sure how these attributes work?
 
     gMiddleText.append('text')
       .attr('class', 'path-ratio')
