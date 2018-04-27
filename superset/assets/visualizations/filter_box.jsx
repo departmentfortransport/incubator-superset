@@ -190,7 +190,7 @@ class FilterBox extends React.Component {
         <div key={filter} className="m-b-5">
           {this.props.datasource.verbose_map[filter] || filter}
           <OnPasteSelect
-            placeholder={t('Select [%s]', filter)}
+            // placeholder={t('Select [%s]', filter)} // did not want the filter name displayed twice
             key={filter}
             multi
             value={this.state.selectedValues[filter]}
@@ -204,7 +204,7 @@ class FilterBox extends React.Component {
                 backgroundImage,
                 padding: '2px 5px',
               };
-              return { value: opt.id, label: opt.id, style };
+              return { value: opt.id, label: opt.id}; // , style }; removing the grey background on filter choices as it's not helpful in this setting
             })}
             onChange={this.changeFilter.bind(this, filter)}
             selectComponent={Creatable}
@@ -249,6 +249,14 @@ function filterBox(slice, payload) {
   // Making sure the ordering of the fields matches the setting in the
   // dropdown as it may have been shuffled while serialized to json
   fd.groupby.forEach((f) => {
+    // the below if condition fixes the sorting for cumulative infrastructure schemes
+    // the filter choices are by default sorted by metric
+    if (f=='comparing') {
+        payload.data[f].sort(function(a, b) {
+        if (a.id < b.id ) return -1;
+        if (b.id < a.id ) return 1;
+      })
+    }
     filtersChoices[f] = payload.data[f];
   });
   ReactDOM.render(

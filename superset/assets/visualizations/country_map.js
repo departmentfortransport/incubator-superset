@@ -27,9 +27,9 @@ function countryMapChart(slice, payload) {
   }
 
   // check values of filters
-  let journey = filterCheck('comparison_metric','journey time');
-  let pct_change = filterCheck('difference type','pct_change');
-  let share = filterCheck('comparison_metric','share');
+  let journey = filterCheck('comparison_metric','Journey time');
+  let pct_change = filterCheck('difference type','Percentage change');
+  let share = filterCheck('comparison_metric','Mode share');
 
 
   if (pct_change==true) {format = d3.format('.2%')}
@@ -43,7 +43,7 @@ function countryMapChart(slice, payload) {
     // define buffer
     let buffer = 0.5
     if (pct_change==true || share==true) {buffer = 0.005} // reduce buffer if for percentages
-    
+
     // creating two different sets of data (positive and negative) needed for
     // creating color scales
     let data_n = [];

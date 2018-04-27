@@ -18,6 +18,7 @@ tmp
 superset_config.py
 local_config.py
 env
+env-superset
 dist
 superset.egg-info/
 app.db
